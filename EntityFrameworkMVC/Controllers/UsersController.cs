@@ -21,9 +21,8 @@ namespace EntityFrameworkMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-              return _context.Users != null ? 
-                          View(await _context.Users.ToListAsync()) :
-                          Problem("Entity set 'ApplicationContext.Users'  is null.");
+            var applicationContext = _context.Users.Include(u => u.Company);
+            return View(await applicationContext.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -34,6 +33,7 @@ namespace EntityFrameworkMVC.Controllers
             }
 
             var user = await _context.Users
+                .Include(u => u.Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -45,12 +45,13 @@ namespace EntityFrameworkMVC.Controllers
 
         public IActionResult Create()
         {
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Age")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Name,Age,CompanyId")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -58,6 +59,7 @@ namespace EntityFrameworkMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", user.CompanyId);
             return View(user);
         }
 
@@ -73,12 +75,13 @@ namespace EntityFrameworkMVC.Controllers
             {
                 return NotFound();
             }
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", user.CompanyId);
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Age")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Age,CompanyId")] User user)
         {
             if (id != user.Id)
             {
@@ -105,6 +108,7 @@ namespace EntityFrameworkMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", user.CompanyId);
             return View(user);
         }
 
@@ -116,6 +120,7 @@ namespace EntityFrameworkMVC.Controllers
             }
 
             var user = await _context.Users
+                .Include(u => u.Company)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {

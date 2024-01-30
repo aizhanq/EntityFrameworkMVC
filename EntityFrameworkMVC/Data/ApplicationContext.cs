@@ -6,12 +6,12 @@ namespace EntityFrameworkMVC.Data
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<Company> Companies { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+           : base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=eftestdb;Trusted_Connection=True;");
         }
+
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Company> Companies { get; set; } = null!;      
     }
 }
