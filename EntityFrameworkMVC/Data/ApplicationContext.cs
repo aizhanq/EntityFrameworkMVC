@@ -11,6 +11,12 @@ namespace EntityFrameworkMVC.Data
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Connecting lazy loading
+            optionsBuilder.UseLazyLoadingProxies();   
+        }
+
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Company> Companies { get; set; } = null!;      
     }
