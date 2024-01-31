@@ -9,6 +9,7 @@ namespace EntityFrameworkMVC.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
            : base(options)
         {
+            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

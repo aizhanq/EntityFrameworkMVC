@@ -29,6 +29,15 @@ namespace EntityFrameworkMVC.Controllers
                 _context.SaveChanges();
             }
 
+            // ChangeTracker
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            var user2 = _context.Users.FirstOrDefault();
+            if (user2 != null)
+            {
+                user2.Age = 8;
+                _context.SaveChanges();
+            }
+
             var applicationContext = _context.Users.Include(u => u.Company);
             return View(await applicationContext.ToListAsync());
         }
