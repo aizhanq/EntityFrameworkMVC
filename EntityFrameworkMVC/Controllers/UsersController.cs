@@ -21,6 +21,14 @@ namespace EntityFrameworkMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // AsNoTracking
+            var user = _context.Users.AsNoTracking().FirstOrDefault();
+            if (user != null)
+            {
+                user.Age = 18;
+                _context.SaveChanges();
+            }
+
             var applicationContext = _context.Users.Include(u => u.Company);
             return View(await applicationContext.ToListAsync());
         }
