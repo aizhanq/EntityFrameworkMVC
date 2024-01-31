@@ -7,7 +7,6 @@ namespace EntityFrameworkMVC.Data
     {
         public static void Initialize(ApplicationContext context)
         {
-            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             // Look for any users
