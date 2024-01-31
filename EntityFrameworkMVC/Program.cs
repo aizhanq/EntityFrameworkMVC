@@ -1,4 +1,5 @@
 using EntityFrameworkMVC.Data;
+using EntityFrameworkMVC.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Configuration;
@@ -10,6 +11,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Dependency Injection
+builder.Services.AddScoped<IMyDependency, MyDependency>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

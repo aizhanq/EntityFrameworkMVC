@@ -7,12 +7,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EntityFrameworkMVC.Data;
 using EntityFrameworkMVC.Models;
+using EntityFrameworkMVC.Services;
 
 namespace EntityFrameworkMVC.Controllers
 {
     public class UsersController : Controller
     {
         private readonly ApplicationContext _context;
+
+        // Dependency Injection
+        private readonly IMyDependency _myDependency = new MyDependency();
+
 
         public UsersController(ApplicationContext context)
         {
@@ -21,6 +26,9 @@ namespace EntityFrameworkMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // Dependency Injection
+            _myDependency.WriteMessage("UsersController.Index");
+
             // AsNoTracking
             var user = _context.Users.AsNoTracking().FirstOrDefault();
             if (user != null)
