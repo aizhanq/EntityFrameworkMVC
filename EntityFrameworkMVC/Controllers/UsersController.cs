@@ -29,25 +29,30 @@ namespace EntityFrameworkMVC.Controllers
             // Dependency Injection
             _myDependency.WriteMessage("UsersController.Index");
 
-            // AsNoTracking
-            var user = _context.Users.AsNoTracking().FirstOrDefault();
-            if (user != null)
-            {
-                user.Age = 18;
-                _context.SaveChanges();
-            }
+            //// AsNoTracking
+            //var user = _context.Users.AsNoTracking().FirstOrDefault();
+            //if (user != null)
+            //{
+            //    user.Age = 18;
+            //    _context.SaveChanges();
+            //}
 
-            // ChangeTracker
-            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var user2 = _context.Users.FirstOrDefault();
-            if (user2 != null)
-            {
-                user2.Age = 8;
-                _context.SaveChanges();
-            }
+            //// ChangeTracker
+            //_context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //var user2 = _context.Users.FirstOrDefault();
+            //if (user2 != null)
+            //{
+            //    user2.Age = 8;
+            //    _context.SaveChanges();
+            //}
 
-            var applicationContext = _context.Users.Include(u => u.Company);
+            // Using lazy loading
+            var applicationContext = _context.Users;
             return View(await applicationContext.ToListAsync());
+
+            //// Load data using Eager loading
+            //var applicationContext = _context.Users.Include(u => u.Company);
+            //return View(await applicationContext.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
